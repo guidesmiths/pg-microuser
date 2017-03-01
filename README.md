@@ -48,5 +48,5 @@ docker run -it
            -e PGDATABASE=mydb \
            -e PGUSER=superuser \
            -e PGPASSWORD=supersecret \
-           quay.io/guidesmiths/pg-microuser create-schema gs_svc_1 secret1 gs_admin_ro gs_admin_rw
+           quay.io/guidesmiths/pg-microuser create-both gs_svc_1 secret1 gs_admin_ro gs_admin_rw
 ```
