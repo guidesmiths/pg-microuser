@@ -48,7 +48,6 @@ if [ "$1" == "create-schema" ]; then
         exit 1
     fi
 
-
     SQL=$(sed "s/__OWNER__/$OWNER/g" create-schema.sql | sed "s/__READ_ONLY_USER__/$READ_ONLY_USER/g" | sed "s/__ADMIN_USER__/$ADMIN_USER/g")
     echo $SQL
     psql << EOF
@@ -59,5 +58,3 @@ fi
 
 echo "Unknown command: $1"
 exit 1
-
-
