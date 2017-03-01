@@ -1,17 +1,41 @@
 #pg-microuser
 Creates PostgresSQL roles and schemas for microservices
 
-## Usage
+## Create Role
 ```
-# Create read only and read/write admin roles which will have access to microservice schemas
-docker run -it -e PGHOST=myhost -e PGDATABASE=mydb -e PGUSER=superuser -e PGPASSWORD=supersecret quay.io/guidesmiths/pg-microuser create-role gs_admin_ro reallysecret
-docker run -it -e PGHOST=myhost -e PGDATABASE=mydb -e PGUSER=superuser -e PGPASSWORD=supersecret quay.io/guidesmiths/pg-microuser create-role gs_admin_rw reallyreallysecret
+# Create gs_admin_ro role which will have read only access to all microservice schemas
+docker run -it \
+           -e PGHOST=myhost \
+           -e PGDATABASE=mydb \
+           -e PGUSER=superuser \
+           -e PGPASSWORD=supersecret \
+           quay.io/guidesmiths/pg-microuser create-role gs_admin_ro reallysecret
 
-# Create a role and schema for microservice 1, granting approriate access to the read only and read/write admin roles
-docker run -it -e PGHOST=myhost -e PGDATABASE=mydb -e PGUSER=superuser -e PGPASSWORD=supersecret quay.io/guidesmiths/pg-microuser create-role gs_svc_1 secret1
-docker run -it -e PGHOST=myhost -e PGDATABASE=mydb -e PGUSER=superuser -e PGPASSWORD=supersecret quay.io/guidesmiths/pg-microuser create-schema gs_svc_1 gs_admin_ro gs_admin_rw
+# Create gs_admin_rw role which will have full access to all microservice schemas
+docker run -it \
+           -e PGHOST=myhost \
+           -e PGDATABASE=mydb \
+           -e PGUSER=superuser \
+           -e PGPASSWORD=supersecret \
+           quay.io/guidesmiths/pg-microuser create-role gs_admin_rw reallyreallysecret
 
-# Create a role and schema for microservice 2, granting approriate access to the read only and read/write admin roles
-docker run -it -e PGHOST=myhost -e PGDATABASE=mydb -e PGUSER=superuser -e PGPASSWORD=supersecret quay.io/guidesmiths/pg-microuser create-role gs_svc_2 secret2
-docker run -it -e PGHOST=myhost -e PGDATABASE=mydb -e PGUSER=superuser -e PGPASSWORD=supersecret quay.io/guidesmiths/pg-microuser create-schema gs_svc_2 gs_admin_ro gs_admin_rw
+
+# Create gs_svc_1 role which will have full access to a single schema
+docker run -it \
+           -e PGHOST=myhost \
+           -e PGDATABASE=mydb \
+           -e PGUSER=superuser \
+           -e PGPASSWORD=supersecret \
+           quay.io/guidesmiths/pg-microuser create-role gs_svc_1 secret1
+```
+
+## Create Schema
+```
+# Create a schema for gs_svc_1 role and grant appropriate access to the gs_admin_ro and gs_admin_rw
+docker run -it
+           -e PGHOST=myhost \
+           -e PGDATABASE=mydb \
+           -e PGUSER=superuser \
+           -e PGPASSWORD=supersecret \
+           quay.io/guidesmiths/pg-microuser create-schema gs_svc_1 gs_admin_ro gs_admin_rw
 ```
