@@ -48,4 +48,10 @@ if [ "$1" == "create-schema" ]; then
     psql << EOF
     $SQL
 EOF
+    exit 0
 fi
+
+echo "Unknown command: $1"
+exit 1
+
+
