@@ -39,3 +39,14 @@ docker run -it
            -e PGPASSWORD=supersecret \
            quay.io/guidesmiths/pg-microuser create-schema gs_svc_1 gs_admin_ro gs_admin_rw
 ```
+
+## Create Both
+Wrapper for create-role and create-schema
+```
+docker run -it
+           -e PGHOST=myhost \
+           -e PGDATABASE=mydb \
+           -e PGUSER=superuser \
+           -e PGPASSWORD=supersecret \
+           quay.io/guidesmiths/pg-microuser create-schema gs_svc_1 secret1 gs_admin_ro gs_admin_rw
+```

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -z "$PGHOST" ] && [ -z "$PGHOSTADDR" ]; then
     echo "PGHOST or PGHOSTADDR environment variable not set"
     exit 1
@@ -63,6 +65,12 @@ if [ "$1" == "create-schema" ]; then
     psql << EOF
     $SQL
 EOF
+    exit 0
+fi
+
+if [ "$1" == "create-both" ]; then
+    ./run.sh create-role $2 $3
+    ./run.sh create-schema $2 $4 $5
     exit 0
 fi
 
