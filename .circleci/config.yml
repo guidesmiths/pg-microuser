@@ -32,6 +32,7 @@ jobs:
               docker tag $UW_DOCKER_REGISTRY/$UW_DOCKER_USER/$SERVICE:$CIRCLE_SHA1 $UW_DOCKER_REGISTRY/$UW_DOCKER_USER/$SERVICE:latest
               docker push $UW_DOCKER_REGISTRY/$UW_DOCKER_USER/$SERVICE
             fi
-      - test:
-          override:
+      - run:
+          name: test
+          command: |
             echo "test"
