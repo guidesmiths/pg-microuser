@@ -48,19 +48,13 @@ if [ "$1" == "create-schema" ]; then
     if [ -z "$OWNER" ]; then
         OWNER=$2
     fi
-    if [ -z "$READ_ONLY_USER" ]; then
-        READ_ONLY_USER=$3
-    fi
-    if [ -z "$ADMIN_USER" ]; then
-        ADMIN_USER=$4
-    fi
 
-    if [ -z "$OWNER" ] || [ -z "$READ_ONLY_USER" ] || [ -z "$ADMIN_USER" ]; then
-        echo "Usage: run.sh create-schema <owner> <read only user> <admin user>"
+    if [ -z "$OWNER" ] ; then
+        echo "Usage: run.sh create-schema <owner>"
         exit 1
     fi
 
-    SQL=$(sed "s/__PGUSER__/$PGUSER/g" create-schema.sql | sed "s/__OWNER__/$OWNER/g" | sed "s/__READ_ONLY_USER__/$READ_ONLY_USER/g" | sed "s/__ADMIN_USER__/$ADMIN_USER/g")
+    SQL=$(sed "s/__PGUSER__/$PGUSER/g" create-schema.sql | sed "s/__OWNER__/$OWNER/g" )
     echo $SQL
     psql << EOF
     $SQL

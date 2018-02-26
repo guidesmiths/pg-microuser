@@ -1,0 +1,34 @@
+jobs:
+  build:
+    docker:
+      - image: alpine:3.6
+        environment:
+          SERVICE: pg-microuser
+          UW_DOCKER_REGISTRY: registry.uw.systems
+          UW_DOCKER_USER: billing
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 17.07.0-ce
+      - run: apk --no-cache add curl
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.05.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run: docker login -e none@none.com -u $UW_DOCKER_USER -p $UW_DOCKER_PASS $UW_DOCKER_REGISTRY
+      - run:
+          name: Build
+          command: |
+            docker build --build-arg "GITHUB_TOKEN=$GITHUB_TOKEN" --build-arg SERVICE=$SERVICE -t $SERVICE-build -f Dockerfile .
+      - deploy:
+          name: Push to registry and deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker build --build-arg SERVICE=$SERVICE -t $UW_DOCKER_REGISTRY/$UW_DOCKER_USER/$SERVICE:$CIRCLE_SHA1 .
+              docker tag $UW_DOCKER_REGISTRY/$UW_DOCKER_USER/$SERVICE:$CIRCLE_SHA1 $UW_DOCKER_REGISTRY/$UW_DOCKER_USER/$SERVICE:latest
+              docker push $UW_DOCKER_REGISTRY/$UW_DOCKER_USER/$SERVICE
+            fi
