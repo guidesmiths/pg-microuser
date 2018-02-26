@@ -1,4 +1,4 @@
-FROM postgres
+FROM postgres:alpine
 
 ADD create-role.sql .
 ADD create-schema.sql .
